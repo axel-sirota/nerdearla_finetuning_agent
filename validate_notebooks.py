@@ -379,13 +379,19 @@ class _ModuleScopeScan(ast.NodeVisitor):
         if node.value is not None:
             self.visit(node.value)
 
+    def _assign_target(self, target: ast.AST) -> None:
+        """Collect every name in a (possibly nested) assignment target."""
+        if isinstance(target, ast.Name):
+            self.assigned.add(target.id)
+        elif isinstance(target, (ast.Tuple, ast.List)):
+            for elt in target.elts:
+                self._assign_target(elt)
+        elif isinstance(target, ast.Starred):
+            self._assign_target(target.value)
+
     def visit_For(self, node: ast.For) -> None:
-        if isinstance(node.target, ast.Name):
-            self.assigned.add(node.target.id)
-        elif isinstance(node.target, (ast.Tuple, ast.List)):
-            for elt in node.target.elts:
-                if isinstance(elt, ast.Name):
-                    self.assigned.add(elt.id)
+        # Nested targets like `for i, (texto, (_, fila)) in ...` bind every inner name.
+        self._assign_target(node.target)
         self.visit(node.iter)
         for stmt in node.body:
             self.visit(stmt)
