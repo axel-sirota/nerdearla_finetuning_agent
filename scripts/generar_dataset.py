@@ -19,7 +19,7 @@ Uso local (la clave sale de .env, que esta en .gitignore):
 """
 from __future__ import annotations
 
-import itertools
+import os
 import random
 import re
 import sys
@@ -38,7 +38,7 @@ MODELO_VERIFICADOR = "gpt-4o"
 POR_COMBINACION = 13         # ~69 combinaciones x 13 = ~900 crudos en la primera ronda
 TOTAL = 600
 TEST = 100
-MAX_RONDAS = 4
+MAX_RONDAS = 6
 PROB_NUMERO_CLIENTE = 0.3    # parte de los reclamos menciona su numero de cliente
 
 # Precios por millon de tokens (entrada, salida), en USD. Solo para reportar el costo.
@@ -52,10 +52,16 @@ CATEGORIAS = {
     "atencion": "mala atencion: nadie le contesta, lo transfieren, no cumplen lo prometido",
     "equipo": "problemas con el modem, router, decodificador o el celular que le dieron",
 }
+# Definiciones con senales concretas. Las usan IGUAL el generador y el verificador:
+# con definiciones vagas, el verificador casi nunca decia "baja" (medido: 14 de 600).
 URGENCIAS = {
-    "alta": "esta sin servicio total, le cobraron mucho dinero de mas, o se va hoy mismo",
-    "media": "problema real que le molesta pero puede esperar unos dias",
-    "baja": "molestia menor o consulta con un poco de queja",
+    "alta": ("hay que atenderlo hoy: esta sin servicio total, le cobraron mucho dinero de "
+             "mas, depende del servicio para trabajar, o amenaza con irse ya"),
+    "media": ("problema real que le afecta, el servicio funciona a medias o el cobro es "
+              "chico, quiere solucion en unos dias pero no es una emergencia"),
+    "baja": ("el servicio funciona; es una molestia chica, una duda o un detalle. El "
+             "cliente lo dice con calma y sin apuro, del estilo 'cuando puedan' o "
+             "'no es urgente'"),
 }
 PRODUCTOS = {
     "fibra": "internet en casa por fibra optica",
@@ -246,6 +252,18 @@ def generar_ronda(client, trabajos, contador) -> list[dict]:
     return filas
 
 
+def es_aceptado(fila) -> bool:
+    """Las tres etiquetas tienen que coincidir EXACTO con el verificador.
+
+    Version anterior: aceptabamos la urgencia a un escalon de distancia. Medido despues del
+    fine-tune: 32 de los 46 errores de urgencia eran justo de un escalon. El ruido de las
+    etiquetas le ponia techo al modelo, asi que ahora exigimos coincidencia exacta.
+    """
+    return (fila.get("v_categoria") == fila["categoria"]
+            and fila.get("v_producto") == fila["producto"]
+            and fila.get("v_urgencia") == fila["urgencia"])
+
+
 def verificar_filas(client, filas, contador) -> None:
     with ThreadPoolExecutor(max_workers=16) as pool:
         futuros = {pool.submit(verificar, client, f["texto"]): f for f in filas}
@@ -258,29 +276,50 @@ def verificar_filas(client, filas, contador) -> None:
                 fila.update(v_categoria=None, v_urgencia=None, v_producto=None, aceptado=False)
                 continue
             contador.sumar(MODELO_VERIFICADOR, uso)
-            dist = abs(ORDEN_URGENCIA[v.urgencia] - ORDEN_URGENCIA[fila["urgencia"]])
-            fila.update(
-                v_categoria=v.categoria, v_urgencia=v.urgencia, v_producto=v.producto,
-                # Categoria y producto tienen que coincidir exacto. La urgencia es mas
-                # subjetiva: aceptamos un escalon de diferencia, nunca alta contra baja.
-                aceptado=(v.categoria == fila["categoria"]
-                          and v.producto == fila["producto"] and dist <= 1),
-            )
+            fila.update(v_categoria=v.categoria, v_urgencia=v.urgencia, v_producto=v.producto)
+            fila["aceptado"] = es_aceptado(fila)
 
 
-def armar_trabajos(clientes, rng, por_combinacion, categorias) -> list:
+# Un cliente "enojado" con urgencia baja es una contradiccion que el verificador rechaza.
+TONOS_POR_URGENCIA = {
+    "alta": TONOS,
+    "media": TONOS,
+    "baja": ["educado", "formal", "confundido", "muy coloquial", "ironico", "tranquilo"],
+}
+
+
+def armar_trabajos(clientes, rng, deficit: dict) -> list:
+    """deficit: {(categoria, urgencia): cuantos aceptados faltan}.
+
+    Pedimos de mas (la tasa de aceptacion ronda 30-50%) y repartimos entre productos.
+    """
     trabajos = []
-    for c, u, p in itertools.product(categorias, URGENCIAS, PRODUCTOS):
-        if (c, p) in IMPOSIBLES:
-            continue
-        specs = []
-        for _ in range(por_combinacion):
-            numero = (cliente_para(clientes, c, p, rng)
-                      if rng.random() < PROB_NUMERO_CLIENTE else None)
-            specs.append({"tono": rng.choice(TONOS), "largo": rng.choice(LARGOS),
-                          "numero": numero})
-        trabajos.append((c, u, p, specs))
+    for (c, u), falta in deficit.items():
+        productos = [p for p in PRODUCTOS if (c, p) not in IMPOSIBLES]
+        por_producto = max(3, min(12, -(-falta * 3 // len(productos))))   # ceil, acotado
+        for p in productos:
+            specs = []
+            for _ in range(por_producto):
+                numero = (cliente_para(clientes, c, p, rng)
+                          if rng.random() < PROB_NUMERO_CLIENTE else None)
+                specs.append({"tono": rng.choice(TONOS_POR_URGENCIA[u]),
+                              "largo": rng.choice(LARGOS), "numero": numero})
+            trabajos.append((c, u, p, specs))
     return trabajos
+
+
+def cuotas() -> dict:
+    """600 en total: 100 por categoria, repartidos 34/33/33 entre urgencias."""
+    por_cat = TOTAL // len(CATEGORIAS)
+    base, resto = divmod(por_cat, len(URGENCIAS))
+    return {(c, u): base + (1 if i < resto else 0)
+            for c in CATEGORIAS for i, u in enumerate(URGENCIAS)}
+
+
+def deficit_de(buenos: pd.DataFrame) -> dict:
+    conteo = buenos.groupby(["categoria", "urgencia"]).size()
+    return {k: q - int(conteo.get(k, 0)) for k, q in cuotas().items()
+            if int(conteo.get(k, 0)) < q}
 
 
 def limpiar(df: pd.DataFrame) -> pd.DataFrame:
@@ -304,36 +343,54 @@ def main() -> int:
     clientes.to_csv(DATA / "clientes.csv", index=False)
     print(f"clientes.csv: {len(clientes)} filas")
 
-    por_cat = TOTAL // len(CATEGORIAS)
     contador = Contador()
     todas: list[dict] = []
-    faltan = list(CATEGORIAS)
-    por_combinacion = POR_COMBINACION
+
+    # Reusamos todo lo ya generado (lo pagado no se tira), pero lo RE-VERIFICAMOS con las
+    # definiciones actuales de urgencia, para que todos los veredictos sean coherentes.
+    previos = DATA / "reclamos_crudos.csv"
+    if previos.exists():
+        prev = pd.read_csv(previos)
+        prev["numero_cliente"] = prev["numero_cliente"].astype("Int64").astype(object)
+        prev["numero_cliente"] = prev["numero_cliente"].where(prev["numero_cliente"].notna(), None)
+        if "v_urgencia" in prev.columns and not os.environ.get("REVERIFICAR"):
+            # Ya tienen veredicto con las definiciones actuales: no pagamos dos veces.
+            # Si cambias las definiciones, corre con REVERIFICAR=1.
+            todas = prev.to_dict("records")
+            for fila in todas:
+                fila["aceptado"] = es_aceptado(fila)
+            print(f"Reusando {len(todas)} crudos con su veredicto guardado")
+        else:
+            todas = [{k: f[k] for k in ("numero_cliente", "texto", "categoria", "urgencia",
+                                         "producto")} for f in prev.to_dict("records")]
+            print(f"Re-verificando {len(todas)} crudos previos con las definiciones nuevas...")
+            verificar_filas(client, todas, contador)
+            pd.DataFrame(todas).to_csv(previos, index=False)
+
+    buenos = limpiar(pd.DataFrame(todas).query("aceptado")) if todas else pd.DataFrame(
+        columns=["categoria", "urgencia"])
+    deficit = deficit_de(buenos) if todas else dict(cuotas())
 
     for ronda in range(1, MAX_RONDAS + 1):
-        print(f"\nRonda {ronda}: generando para {faltan}")
-        nuevas = generar_ronda(client, armar_trabajos(clientes, rng, por_combinacion, faltan),
-                               contador)
+        print(f"\nAceptados por urgencia: {buenos['urgencia'].value_counts().to_dict()}")
+        if not deficit:
+            break
+        print(f"Ronda {ronda}: faltan {sum(deficit.values())} en {len(deficit)} combinaciones")
+        nuevas = generar_ronda(client, armar_trabajos(clientes, rng, deficit), contador)
         verificar_filas(client, nuevas, contador)
         todas.extend(nuevas)
         crudos = pd.DataFrame(todas)
         # Guardamos lo crudo en cada ronda: si algo falla despues, no se pierde lo pagado.
         crudos.to_csv(DATA / "reclamos_crudos.csv", index=False)
-
         buenos = limpiar(crudos[crudos["aceptado"]])
-        conteo = buenos["categoria"].value_counts()
-        print("  aceptados por categoria:", conteo.reindex(list(CATEGORIAS), fill_value=0).to_dict())
-        faltan = [c for c in CATEGORIAS if conteo.get(c, 0) < por_cat]
-        if not faltan:
-            break
-        # Para la ronda siguiente, solo las categorias cortas, con lotes mas chicos.
-        por_combinacion = 6
+        deficit = deficit_de(buenos)
     else:
-        print(f"\nAVISO: tras {MAX_RONDAS} rondas siguen cortas: {faltan}", file=sys.stderr)
+        print(f"\nAVISO: tras {MAX_RONDAS} rondas siguen cortas: {deficit}", file=sys.stderr)
 
-    # Recorte a 100 por categoria, mezclando urgencias, y split 500/100 estratificado.
-    df = pd.concat([g.sample(n=min(len(g), por_cat), random_state=SEED)
-                    for _, g in buenos.groupby("categoria")])
+    # Recorte por cuota (categoria x urgencia) y split 500/100 estratificado por categoria.
+    q = cuotas()
+    df = pd.concat([g.sample(n=min(len(g), q[k]), random_state=SEED)
+                    for k, g in buenos.groupby(["categoria", "urgencia"])])
     df = df.sample(frac=1, random_state=SEED).reset_index(drop=True)
     grupos = list(df.groupby("categoria"))
     test_idx = pd.Index([])
