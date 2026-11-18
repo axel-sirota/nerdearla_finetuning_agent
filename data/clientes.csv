@@ -1,0 +1,51 @@
+numero_cliente,nombre,producto,plan,monto_mensual_mxn,ultimo_cobro_mxn,cobros_duplicados,dias_sin_servicio,antiguedad_meses
+1001,Sofia Lopez,fibra,Fibra 200,449.0,898.0,1,5,29
+1002,Valeria Rivera,movil,Movil 10 GB,199.0,199.0,0,0,70
+1003,Fernanda Hernandez,fibra,Fibra 1000,899.0,899.0,0,0,4
+1004,Daniela Torres,fibra,Fibra 200,449.0,449.0,0,0,4
+1005,Jorge Sanchez,movil,Movil Ilimitado,399.0,798.0,1,0,76
+1006,Paola Martinez,tv,TV Basica,249.0,249.0,0,0,90
+1007,Mariana Lopez,paquete,Doble Play,749.0,749.0,0,0,44
+1008,Fernanda Garcia,fibra,Fibra 200,449.0,449.0,0,0,46
+1009,Paola Hernandez,tv,TV Premium,549.0,1098.0,1,0,94
+1010,Luis Ramirez,paquete,Triple Play,999.0,999.0,0,1,38
+1011,Miguel Garcia,tv,TV Basica,249.0,249.0,0,0,6
+1012,Luis Lopez,movil,Movil Ilimitado,399.0,399.0,0,0,13
+1013,Valeria Perez,paquete,Doble Play,749.0,1498.0,1,1,21
+1014,Jorge Flores,tv,TV Premium,549.0,549.0,0,0,35
+1015,Valeria Martinez,fibra,Fibra 1000,899.0,899.0,0,0,69
+1016,Fernanda Gonzalez,movil,Movil 10 GB,199.0,199.0,0,1,82
+1017,Andres Hernandez,movil,Movil Ilimitado,399.0,798.0,1,0,30
+1018,Fernanda Gonzalez,fibra,Fibra 500,649.0,649.0,0,0,9
+1019,Valeria Sanchez,movil,Movil Ilimitado,399.0,399.0,0,0,51
+1020,Sofia Martinez,paquete,Triple Play,999.0,999.0,0,0,32
+1021,Gabriela Torres,tv,TV Premium,549.0,1098.0,1,0,52
+1022,Daniela Sanchez,tv,TV Basica,249.0,249.0,0,0,12
+1023,Mariana Flores,fibra,Fibra 200,449.0,449.0,0,0,21
+1024,Fernanda Rodriguez,paquete,Triple Play,999.0,999.0,0,0,77
+1025,Andres Hernandez,paquete,Doble Play,749.0,1498.0,1,2,88
+1026,Gabriela Ramirez,fibra,Fibra 1000,899.0,899.0,0,0,35
+1027,Sofia Rodriguez,tv,TV Basica,249.0,249.0,0,0,21
+1028,Gabriela Rivera,paquete,Triple Play,999.0,999.0,0,5,34
+1029,Andres Flores,movil,Movil 10 GB,199.0,398.0,1,0,39
+1030,Carlos Martinez,movil,Movil 10 GB,199.0,199.0,0,0,70
+1031,Ricardo Hernandez,fibra,Fibra 1000,899.0,899.0,0,0,15
+1032,Jorge Hernandez,tv,TV Premium,549.0,549.0,0,0,31
+1033,Miguel Sanchez,fibra,Fibra 200,449.0,898.0,1,0,9
+1034,Ricardo Ramirez,movil,Movil 10 GB,199.0,199.0,0,5,22
+1035,Jorge Ramirez,tv,TV Premium,549.0,549.0,0,0,94
+1036,Fernanda Flores,movil,Movil Ilimitado,399.0,399.0,0,0,84
+1037,Ricardo Garcia,tv,TV Premium,549.0,1098.0,1,2,32
+1038,Carlos Hernandez,movil,Movil 10 GB,199.0,199.0,0,0,76
+1039,Ana Garcia,movil,Movil 10 GB,199.0,199.0,0,0,91
+1040,Gabriela Hernandez,fibra,Fibra 200,449.0,449.0,0,0,43
+1041,Jorge Gonzalez,fibra,Fibra 1000,899.0,1798.0,1,0,86
+1042,Daniela Martinez,paquete,Triple Play,999.0,999.0,0,0,93
+1043,Paola Rodriguez,paquete,Triple Play,999.0,999.0,0,1,25
+1044,Valeria Rodriguez,fibra,Fibra 200,449.0,449.0,0,0,46
+1045,Ricardo Rivera,paquete,Doble Play,749.0,1498.0,1,0,7
+1046,Miguel Perez,fibra,Fibra 200,449.0,449.0,0,1,14
+1047,Jorge Ramirez,movil,Movil 10 GB,199.0,199.0,0,0,58
+1048,Mariana Gonzalez,movil,Movil Ilimitado,399.0,399.0,0,0,60
+1049,Paola Ramirez,movil,Movil 10 GB,199.0,398.0,1,1,13
+1050,Daniela Hernandez,fibra,Fibra 1000,899.0,899.0,0,0,12

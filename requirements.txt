@@ -17,3 +17,9 @@ requests
 
 # Push the pre-trained fallback adapter and the dataset to the HF Hub
 huggingface_hub==2.4.0
+
+# Synthetic dataset generation (scripts/generar_dataset.py), local build only
+openai==3.54.0
+python-dotenv==1.2.4
+pydantic==2.14.3
+pandas==3.1.1
