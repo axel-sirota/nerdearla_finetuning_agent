@@ -1,0 +1,29 @@
+.venv/
+__pycache__/
+
+# Keys come from getpass in the notebook, so there is no .env in the workshop flow.
+# This stays ignored for the local build venv, which may use one.
+.env
+*.pyc
+.ipynb_checkpoints/
+progress.txt
+HANDOFF.md
+.DS_Store
+
+# Research plans stay local unless we decide to ship them
+plans/
+
+# Kryla tooling state
+.kryla/
+
+# Model artifacts the notebook generates. Never commit weights.
+outputs/
+checkpoints/
+adapter/
+*_adapter/
+merged/
+*.gguf
+*.safetensors
+*.bin
+Modelfile
+wandb/

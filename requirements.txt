@@ -1,0 +1,16 @@
+# Local tooling environment for building the workshop.
+# The notebook installs its own dependencies in Colab via !pip install.
+#
+# Workshop stack (transformers, peft, trl, bitsandbytes, langchain, ...) is added here,
+# pinned, once /init-workshop locks it and each import is verified in this venv.
+
+# QR codes for the opening and closing cells
+qrcode[pil]==8.2
+
+# Notebook tooling
+nbformat==5.11.1
+jupyter==1.1.1
+pyflakes==3.4.0
+
+# Diagram render check (mermaid.ink needs requests, urllib gets 403)
+requests
