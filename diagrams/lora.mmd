@@ -1,0 +1,11 @@
+graph TD
+    X["Entrada x"] --> W["W original 1536 x 1536 - congelado, no se toca"]
+    X --> A["A: 1536 x 16 - se entrena"]
+    A --> B["B: 16 x 1536 - se entrena"]
+    W --> S(("+"))
+    B --> S
+    S --> H["Salida h"]
+    N["Solo A y B aprenden: 1.18% de los parametros"] -.- A
+    style W fill:#e5e7eb,stroke:#6b7280
+    style A fill:#e2f5e9,stroke:#27ae60
+    style B fill:#e2f5e9,stroke:#27ae60

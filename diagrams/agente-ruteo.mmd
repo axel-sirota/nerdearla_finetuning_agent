@@ -1,0 +1,16 @@
+sequenceDiagram
+    participant C as Cliente
+    participant A as Agente gpt-4o-mini
+    participant M as clasificar_reclamo - nuestro modelo
+    participant D as consultar_cliente - codigo
+    Note over C,D: Caso 1: reclamo con numero de cliente
+    C->>A: Me cobraron doble, soy el 1041
+    A->>M: clasifica el texto
+    M-->>A: facturacion, alta, fibra (costo 0)
+    A->>D: datos del 1041
+    D-->>A: cobro duplicado confirmado (0 tokens)
+    A-->>C: respuesta redactada
+    Note over C,D: Caso 2: reclamo sin numero, solo nuestro modelo
+    Note over C,D: Caso 3: pregunta de horario, el agente responde solo
+    C->>A: A que hora abren?
+    A-->>C: respuesta sin tools

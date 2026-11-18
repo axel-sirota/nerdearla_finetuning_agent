@@ -1,0 +1,7 @@
+graph LR
+    R["Reclamo de un cliente"] -->|por internet| API["API paga: gpt-4o-mini"]
+    API -->|pago por llamada, los datos salen| J["JSON: categoria, urgencia, producto"]
+    R -->|se queda adentro| M["Modelo chico en tu GPU"]
+    M -->|gratis y privado| J
+    style API fill:#fde2e2,stroke:#c0392b
+    style M fill:#e2f5e9,stroke:#27ae60

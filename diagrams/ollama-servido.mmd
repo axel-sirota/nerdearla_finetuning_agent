@@ -1,0 +1,9 @@
+graph LR
+    AD["Adapter LoRA, 74 MB"] --> CONV["Convertir a GGUF con llama.cpp"]
+    CONV --> OL["Ollama en la T4"]
+    BASE["Base qwen2.5 1.5b cuantizado"] --> OL
+    OL --> EP["Endpoint compatible con OpenAI: localhost:11434/v1"]
+    EP --> APP["Tu app"]
+    EP --> AG["Tu agente, Lab 3"]
+    NOTA["Nada sale de la maquina"] -.- OL
+    style OL fill:#e2f5e9,stroke:#27ae60

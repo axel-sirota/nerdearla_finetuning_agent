@@ -1,0 +1,15 @@
+flowchart LR
+    A{"Se puede<br/>con codigo?"} -->|si| COD["CODIGO<br/>reglas, regex, SQL"]
+    A -->|no| B{"Necesita hechos<br/>que cambian?"}
+    B -->|si| RAG["RAG<br/>busca y pasa contexto"]
+    B -->|no| C{"Tarea estrecha<br/>y repetitiva?"}
+    C -->|no| P["PROMPT<br/>modelo grande"]
+    C -->|si| D{"Cientos de<br/>ejemplos?"}
+    D -->|no| P
+    D -->|si| E{"Los datos deben<br/>quedarse en casa?"}
+    E -->|si| FT["FINE-TUNING<br/>tu modelo, tu GPU"]
+    E -->|no| F{"El prompt da la calidad<br/>y el costo que necesitas?"}
+    F -->|si| P
+    F -->|no| FT
+    style FT fill:#e2f5e9,stroke:#27ae60
+    style COD fill:#e0ecff,stroke:#2f6fdb

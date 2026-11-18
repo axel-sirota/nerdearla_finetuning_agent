@@ -1,0 +1,7 @@
+graph LR
+    BASE["Qwen 1.5B base en 4 bits NF4 - congelado, 1.1 GB"] -->|los calculos van en fp16| AD["Adapter LoRA en fp32 - se entrena, 74 MB"]
+    AD --> OUT["Modelo experto en reclamos"]
+    GPU["GPU T4 de 15 GB - pico medido: 2.7 GB"] -.- BASE
+    GPU -.- AD
+    style BASE fill:#e5e7eb,stroke:#6b7280
+    style AD fill:#e2f5e9,stroke:#27ae60
