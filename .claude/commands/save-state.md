@@ -101,7 +101,7 @@ KNOWN ISSUES / OPEN TODOS
 LOCKED DECISIONS (do not re-litigate without Axel)
 ==============================================================================
 
-- Notebook in Rioplatense Spanish with voseo. Identifiers English. Chat English.
+- Notebook in neutral Spanish with tu (Mexico audience, no voseo). Identifiers English. Chat English.
 - ONE notebook. Mini-exercise solutions in the end section. NOTHING BLOCKS.
 - Colab free T4. Keys via getpass, never .env. No bf16.
 - Every slow cell has a non-blocking fallback.

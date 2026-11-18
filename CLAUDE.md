@@ -4,7 +4,7 @@ Guidance for Claude Code working in this repository.
 
 ## Project Overview
 
-Live workshop by Axel Sirota (Data Trainers LLC) for Nerdearla: **fine-tune a small LLM with
+Live workshop by Axel Sirota (Data Trainers LLC) for **Nerdearla Mexico**: **fine-tune a small LLM with
 QLoRA, self-host it, and give it to an agent as a tool.** 60 minutes, demoed live, step by
 step, in front of an audience.
 
@@ -17,8 +17,9 @@ that file wins. If it does not exist yet, run `/init-workshop` first.
 
 This repo was cloned in process and style from `~/repos/nerdearla_concierge_agent`.
 `reference/estilo_concierge.ipynb` is that workshop's finished notebook, kept **read-only as
-a style reference**: comment density, voseo, the NARRAR / PARA CASA markers, the QR and
-Data Trainers cells, the mini-exercise and solutions pattern. Never copy its content.
+a style reference**: comment density, the NARRAR / PARA CASA markers, the QR and Data
+Trainers cells, the mini-exercise and solutions pattern. Never copy its content. **Do not copy
+its register either**: it is Rioplatense with voseo, this workshop is neutral Spanish with tu.
 
 **Central pitch** (from the talk abstract):
 
@@ -30,9 +31,15 @@ sending everything out.
 
 ## Language Rule (CRITICAL)
 
-- **Notebook content is in fully Rioplatense Spanish with voseo** ("fijate", "arma", "vos",
-  "acordate"), as Axel speaks. This covers every markdown cell, every code comment, every
-  printed string, every exercise instruction.
+- **Notebook content is in neutral Latin American Spanish with tu**, for a Mexican audience:
+  "fíjate", "arma", "tú", "recuerda". **No voseo** ("vos", "fijate", "armá", "tenés") and
+  **no Argentine slang** ("che", "laburo", "re", "boludo", "plata"). Prefer words that read
+  naturally in Mexico ("dinero", "computadora", "celular"). This covers every markdown cell,
+  every code comment, every printed string, every exercise instruction.
+- **Accents and ñ are written correctly** in notebook copy ("análisis", "configuración",
+  "año"). Mermaid diagram labels stay plain ASCII, since accents can break the render.
+- **The dataset** is in the same neutral Spanish: a fictional Mexican company, prices in MXN.
+- How Axel talks on stage is his own voice; the notebook reads neutral for whoever opens it.
 - **Code identifiers stay in English** (`base_model`, `train_dataset`, `lora_config`).
 - **Conversation with Axel is in English.** Plans, chat summaries, approval questions,
   commit messages: English.

@@ -23,7 +23,8 @@ There is ONE notebook. No exercise/solution pair.
 - A `## Soluciones de los mini ejercicios` section exists near the end
 
 ### Language and tone
-- **All markdown, comments and printed strings in fully Rioplatense Spanish with voseo**
+- **All markdown, comments and printed strings in neutral Spanish with tu.** Flag voseo
+  ("vos", "tenés", "fijate", "acordate", "armá") and Argentine slang ("che", "laburo", "plata")
 - Code identifiers in English, no half-translated cells
 - **Demo code is heavily commented**
 - No AI-tells (em dash, en dash, Unicode multiplication, bare --- in markdown)

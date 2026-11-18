@@ -50,7 +50,8 @@ No exercise/solution pair. Mini-exercise solutions live in a section at its end.
    notebook, so every earlier variable is still live. Never redefine a name that already
    exists; bridge to it. Never reload a model already in GPU memory.
 5. `reference/estilo_concierge.ipynb`: the previous workshop's notebook. Style reference
-   only (comment density, NARRAR / PARA CASA markers, voseo). Never copy its content.
+   only (comment density, NARRAR / PARA CASA markers). Never copy its content, and never its
+   Rioplatense voseo: this notebook is neutral Spanish with tu.
 
 ### Step 2: Show Plan Summary Before Building
 
@@ -106,7 +107,7 @@ Mini exercise cell shape:
 
 ```python
 # EJERCICIO 1 (opcional, para despues)
-# Cambia r=8 por r=16 en LoraConfig y fijate cuantos parametros entrenables quedan.
+# Cambia r=8 por r=16 en LoraConfig y fíjate cuántos parámetros entrenables quedan.
 # Pista: print_trainable_parameters() te lo dice en una linea.
 # Solucion al final del notebook.
 ```
@@ -118,8 +119,9 @@ Mini exercise cell shape:
 **Every markdown cell, code comment and printed string is in Spanish.** Code identifiers
 stay in English. Chat with Axel stays in English.
 
-- First person plural: "Vamos a ver...", "Fijate que si no hacemos esto..."
-- Fully Rioplatense register with voseo: 'fijate', 'arma', 'vos', 'acordate'
+- First person plural: "Vamos a ver...", "Fíjate que si no hacemos esto..."
+- Neutral Latin American Spanish with tu, for a Mexican audience: 'fíjate', 'arma', 'tú',
+  'recuerda'. No voseo, no Argentine slang. Accents and ñ written correctly
 - Encouraging and warm; many attendees are fine-tuning for the first time
 - Emojis welcome in markdown headers and section titles
 - No jargon unless explained in the same cell. "LoRA", "QLoRA", "adapter", "cuantizacion",
@@ -270,7 +272,7 @@ commented implementation, one or two sentences on why it works.
 ## Checklist (complete before marking done)
 
 - [ ] Section title has emoji, learning objectives clear
-- [ ] **Everything attendee-facing in fully Rioplatense Spanish with voseo**
+- [ ] **Everything attendee-facing in neutral Spanish with tu, no voseo, accents correct**
 - [ ] Code identifiers in English, no half-translated cells
 - [ ] **NOTHING BLOCKS**: every cell runs as written, no `None  # TU CODIGO`
 - [ ] Every slow cell has a marked, non-blocking fallback

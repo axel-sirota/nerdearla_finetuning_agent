@@ -197,7 +197,7 @@ CYCLE TRACKER
 - For EACH concept (2-4 per beat), plan cells following the four-beat arc:
   - **Problem** markdown + naive code that runs and shows the problem
   - **Diagram**: `<!-- DIAGRAM: ... -->` marker, then a `mostrar_diagrama("<slug>")` cell
-  - **Demo** code: complete, runnable, **heavily commented** in Rioplatense Spanish
+  - **Demo** code: complete, runnable, **heavily commented** in neutral Spanish with tu (no voseo)
   - **Mini exercise** (optional): a comment-only cell, additive, nothing downstream reads it
 - **NOTHING BLOCKS.** No `None  # TU CODIGO` in the main flow.
 - Never chain more than 3 markdown cells without a code cell.

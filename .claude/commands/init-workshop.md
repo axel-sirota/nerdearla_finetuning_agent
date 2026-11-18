@@ -74,7 +74,7 @@ Q12: "Same delivery as the concierge: demo-led, heavy comments, nothing blocks, 
 
 Q13: "The closing segment (when to fine-tune vs prompt): do you want a cost table with real numbers we measure, and a decision template they take home?"
 
-Q14: "Spanish register: fully Rioplatense with voseo, as before?"
+Q14: "Spanish register: neutral Latin American Spanish with tu for Nerdearla Mexico (already set in CLAUDE.md). Anything to add?"
 
 Q15: "Anything else: pacing, what makes this land vs fall flat, the one thing they must leave with?"
 
